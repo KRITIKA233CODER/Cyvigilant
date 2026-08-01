@@ -3,7 +3,6 @@ const router = express.Router();
 const Conversation = require('../models/Conversation');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-// Configure Gemini AI (if key is provided)
 let genAI = null;
 let aiModel = null;
 if (process.env.GEMINI_API_KEY) {
@@ -21,9 +20,6 @@ if (process.env.GEMINI_API_KEY) {
   console.warn('GEMINI_API_KEY not found in env. Running in Fallback Mock Mode.');
 }
 
-/**
- * Mock response generator for fallback
- */
 const getMockResponse = (userMessage, username) => {
   const msg = userMessage.toLowerCase();
   let text = `Hello ${username}, thank you for contacting Vigilant Technologies Support. (Running in Demo/Mock Mode: GEMINI_API_KEY is not configured).`;
@@ -42,14 +38,9 @@ const getMockResponse = (userMessage, username) => {
   return text;
 };
 
-/**
- * @route   POST /api/chat
- * @desc    Send a message, get AI response, save to DB
- */
 router.post('/chat', async (req, res) => {
   const { username, message, conversationId } = req.body;
 
-  // Validation
   if (!username || typeof username !== 'string' || username.trim() === '') {
     return res.status(400).json({ success: false, error: 'Username is required' });
   }
@@ -60,21 +51,18 @@ router.post('/chat', async (req, res) => {
   try {
     let conversation;
 
-    // Check if we are appending to an existing conversation
     if (conversationId) {
       conversation = await Conversation.findById(conversationId);
       if (!conversation) {
         return res.status(404).json({ success: false, error: 'Conversation session not found' });
       }
     } else {
-      // Start a new conversation
       conversation = new Conversation({
         username: username.trim(),
         messages: []
       });
     }
 
-    // Map conversation messages to Gemini format (excluding the new one)
     const contents = [];
     conversation.messages.forEach(msg => {
       contents.push({
@@ -83,7 +71,6 @@ router.post('/chat', async (req, res) => {
       });
     });
 
-    // Add new user message to the Gemini API history call
     contents.push({
       role: 'user',
       parts: [{ text: message.trim() }]
@@ -91,21 +78,18 @@ router.post('/chat', async (req, res) => {
 
     let aiReply = '';
 
-    // If Gemini client is active, query it. Otherwise, use mock fallback.
     if (aiModel) {
       try {
         const result = await aiModel.generateContent({ contents });
         aiReply = result.response.text();
       } catch (err) {
         console.error('Gemini API Error:', err.message);
-        // Soft fallback if Gemini fails on the fly (e.g. rate limit, invalid key)
         aiReply = `[System Notification: AI service temporarily unavailable. Fallback response active.]\nHello ${username}, I received your message: "${message}". How can I help you resolve this issue today?`;
       }
     } else {
       aiReply = getMockResponse(message.trim(), username.trim());
     }
 
-    // Save user message and AI message to local conversation log
     conversation.messages.push({ sender: 'user', text: message.trim() });
     conversation.messages.push({ sender: 'ai', text: aiReply.trim() });
 
@@ -124,14 +108,9 @@ router.post('/chat', async (req, res) => {
   }
 });
 
-/**
- * @route   GET /api/chat/history
- * @desc    Get all conversations list (for sidebar summary)
- */
 router.get('/chat/history', async (req, res) => {
   try {
     const { username } = req.query;
-    // Build query to filter by username (case-insensitive) if specified
     const filter = username 
       ? { username: new RegExp(`^${username.trim()}$`, 'i') } 
       : {};
@@ -141,7 +120,7 @@ router.get('/chat/history', async (req, res) => {
       .select({
         username: 1,
         createdAt: 1,
-        messages: { $slice: -1 } // Retrieve only the last message for preview
+        messages: { $slice: -1 }
       });
 
     const list = conversations.map(convo => {
@@ -161,10 +140,6 @@ router.get('/chat/history', async (req, res) => {
   }
 });
 
-/**
- * @route   GET /api/chat/history/:id
- * @desc    Get a single conversation detail with all messages
- */
 router.get('/chat/history/:id', async (req, res) => {
   try {
     const conversation = await Conversation.findById(req.params.id);
@@ -178,10 +153,6 @@ router.get('/chat/history/:id', async (req, res) => {
   }
 });
 
-/**
- * @route   DELETE /api/chat/history/:id
- * @desc    Delete a conversation history
- */
 router.delete('/chat/history/:id', async (req, res) => {
   try {
     const conversation = await Conversation.findByIdAndDelete(req.params.id);

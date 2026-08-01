@@ -48,7 +48,7 @@ body {
   height: 100%;
 }
 
-/* Modern Scrollbars */
+
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -68,14 +68,14 @@ body {
   background: rgba(0, 242, 254, 0.4);
 }
 
-/* Typography Details */
+
 h1, h2, h3, h4 {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
 
-/* Base App Layout */
+
 .app-container {
   display: flex;
   height: 100vh;
@@ -84,7 +84,7 @@ h1, h2, h3, h4 {
   overflow: hidden;
 }
 
-/* Decorative Light Halos */
+
 .app-container::before {
   content: '';
   position: absolute;
@@ -109,7 +109,7 @@ h1, h2, h3, h4 {
   pointer-events: none;
 }
 
-/* Welcome Overlay Name Login */
+
 .welcome-overlay {
   position: fixed;
   top: 0;
@@ -225,7 +225,7 @@ h1, h2, h3, h4 {
   transform: translateY(0);
 }
 
-/* Sidebar Layout Panel */
+
 .sidebar {
   width: var(--sidebar-width);
   background: var(--bg-secondary);
@@ -430,7 +430,7 @@ h1, h2, h3, h4 {
   background: rgba(239, 68, 68, 0.08);
 }
 
-/* Main Chat Area Grid */
+
 .chat-main {
   flex: 1;
   display: flex;
@@ -491,7 +491,7 @@ h1, h2, h3, h4 {
   margin-top: 1px;
 }
 
-/* Chat Message Port Container */
+
 .messages-container {
   flex: 1;
   overflow-y: auto;
@@ -535,7 +535,7 @@ h1, h2, h3, h4 {
   color: var(--text-muted);
 }
 
-/* Individual Message Layout bubble styling */
+
 .message-row {
   display: flex;
   width: 100%;
@@ -592,7 +592,7 @@ h1, h2, h3, h4 {
   color: var(--text-muted);
 }
 
-/* Chat Send Input Box Footer styling */
+
 .chat-footer {
   padding: 24px 40px 32px 40px;
   background: var(--bg-secondary);
@@ -664,7 +664,7 @@ h1, h2, h3, h4 {
   box-shadow: none;
 }
 
-/* Typing Loading Dots styling */
+
 .typing-indicator {
   display: flex;
   align-items: center;
@@ -689,7 +689,7 @@ h1, h2, h3, h4 {
   animation-delay: 0.4s;
 }
 
-/* Red Error Notification Banner */
+
 .error-banner {
   background: rgba(239, 68, 68, 0.08);
   border: 1px solid rgba(239, 68, 68, 0.25);
@@ -721,7 +721,7 @@ h1, h2, h3, h4 {
   opacity: 1;
 }
 
-/* Mobile responsive menu */
+
 .mobile-header {
   display: none;
   height: 64px;
@@ -748,7 +748,7 @@ h1, h2, h3, h4 {
   background: rgba(255, 255, 255, 0.05);
 }
 
-/* CSS Keyframes */
+
 @keyframes modalEnter {
   from {
     transform: scale(0.96) translateY(10px);
@@ -807,7 +807,7 @@ h1, h2, h3, h4 {
   }
 }
 
-/* Responsive Media Queries */
+
 @media (max-width: 900px) {
   .sidebar {
     position: fixed;
@@ -852,7 +852,7 @@ h1, h2, h3, h4 {
   }
 }
 
-/* Sidebar Backdrop Overlay */
+
 .sidebar-backdrop {
   position: fixed;
   top: 64px;
@@ -865,7 +865,7 @@ h1, h2, h3, h4 {
   animation: fadeIn 0.3s ease;
 }
 
-/* Quick Prompt Suggestion Cards */
+
 .quick-prompts-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -915,7 +915,7 @@ h1, h2, h3, h4 {
   }
 }
 
-/* Formatted AI response markup styles */
+
 .formatted-message p {
   margin-bottom: 10px;
 }
@@ -957,7 +957,7 @@ h1, h2, h3, h4 {
   color: var(--text-dark);
 }
 
-/* Sidebar Collapse Toggle and Actions Layout */
+
 .header-actions {
   display: flex;
   align-items: center;
@@ -1028,7 +1028,7 @@ h1, h2, h3, h4 {
   justify-content: center;
 }
 
-/* Copy Response Button Layout */
+
 .message-bubble-footer {
   display: flex;
   justify-content: space-between;
@@ -1076,7 +1076,7 @@ h1, h2, h3, h4 {
   opacity: 1 !important;
 }
 
-/* Hide collapse toggle button on mobile viewport */
+
 @media (max-width: 900px) {
   .collapse-toggle-btn {
     display: none;
@@ -1086,7 +1086,7 @@ h1, h2, h3, h4 {
   }
 }
 
-/* Floating profile card pop-up on hover */
+
 .profile-card-popup {
   position: absolute;
   bottom: calc(100% + 12px);
@@ -1108,7 +1108,7 @@ h1, h2, h3, h4 {
   transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Show the pop-up when hovering over the sidebar footer */
+
 .sidebar-footer:hover .profile-card-popup {
   opacity: 1;
   pointer-events: auto;
@@ -1199,7 +1199,7 @@ h1, h2, h3, h4 {
   transform: translateY(-1px);
 }
 
-/* Collapsed footer sign out handler area */
+
 .profile-card-collapsed-click {
   position: absolute;
   top: 0;
@@ -1226,7 +1226,7 @@ h1, h2, h3, h4 {
   box-shadow: 0 0 12px rgba(239, 68, 68, 0.2);
 }
 
-/* Telemetry Status Monitor Badge (Header) */
+
 .chat-header {
   display: flex;
   justify-content: space-between;
@@ -1286,7 +1286,7 @@ h1, h2, h3, h4 {
   50% { opacity: 1; }
 }
 
-/* Chat Status Indicator in Header */
+
 .chat-status-indicator.online {
   background: #10b981;
   box-shadow: 0 0 8px #10b981;
@@ -1297,7 +1297,7 @@ h1, h2, h3, h4 {
   box-shadow: 0 0 8px #ef4444;
 }
 
-/* Onboarding Welcome / Empty Chat Screen */
+
 .empty-chat {
   display: flex;
   flex-direction: column;
@@ -1351,7 +1351,7 @@ h1, h2, h3, h4 {
   line-height: 1.6;
 }
 
-/* Quick Action Suggestion Cards Grid */
+
 .quick-prompts-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1457,7 +1457,7 @@ h1, h2, h3, h4 {
   line-height: 1.4;
 }
 
-/* Adjust grid for smaller tablet viewports */
+
 @media (max-width: 600px) {
   .quick-prompts-grid {
     grid-template-columns: 1fr;
@@ -1465,7 +1465,7 @@ h1, h2, h3, h4 {
   }
 }
 
-/* SaaS Landing Page Styling */
+
 .landing-page {
   width: 100vw;
   height: 100vh;
@@ -1481,7 +1481,7 @@ h1, h2, h3, h4 {
   z-index: 10;
 }
 
-/* Nav bar */
+
 .landing-nav {
   display: flex;
   justify-content: space-between;
@@ -1523,7 +1523,7 @@ h1, h2, h3, h4 {
   color: #34d399;
 }
 
-/* Content Container */
+
 .landing-content {
   flex: 1;
   max-width: 1200px;
@@ -1579,7 +1579,7 @@ h1, h2, h3, h4 {
   margin-bottom: 32px;
 }
 
-/* Features List in Hero */
+
 .landing-features {
   display: flex;
   flex-direction: column;
@@ -1603,7 +1603,7 @@ h1, h2, h3, h4 {
   box-shadow: 0 0 8px var(--accent-primary);
 }
 
-/* Login Card Section */
+
 .landing-login-section {
   display: flex;
   justify-content: center;
@@ -1692,7 +1692,7 @@ h1, h2, h3, h4 {
   transform: translateY(-1px);
 }
 
-/* Footer styling */
+
 .landing-footer {
   padding: 24px;
   text-align: center;
@@ -1701,7 +1701,7 @@ h1, h2, h3, h4 {
   color: var(--text-muted);
 }
 
-/* Responsive grid layouts */
+
 @media (max-width: 900px) {
   .landing-content {
     grid-template-columns: 1fr;

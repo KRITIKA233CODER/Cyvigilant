@@ -23,7 +23,7 @@ import {
 
 const API_BASE = 'http://localhost:5000/api';
 
-// Copy to clipboard helper component
+
 const CopyButton = ({ text }) => {
   const [copied, setCopied] = useState(false);
 
@@ -46,11 +46,11 @@ const CopyButton = ({ text }) => {
   );
 };
 
-// Simple helper to parse **bold** tags into React elements
+
 const parseBold = (text) => {
   const parts = text.split(/\*\*([^*]+)\*\*/g);
   return parts.map((part, index) => {
-    // Odd indices match the capture group inside **...**
+    
     if (index % 2 === 1) {
       return <strong key={index} className="accent-bold">{part}</strong>;
     }
@@ -58,7 +58,7 @@ const parseBold = (text) => {
   });
 };
 
-// Formats newlines and bullet list markers into standard markup
+
 const renderMessageText = (text) => {
   if (!text) return null;
   
@@ -110,17 +110,17 @@ const renderMessageText = (text) => {
 };
 
 function App() {
-  // Authentication / User Identification
+  
   const [username, setUsername] = useState(() => localStorage.getItem('chat_username') || '');
   const [inputName, setInputName] = useState('');
 
-  // Conversations & Messages State
+  
   const [conversations, setConversations] = useState([]);
   const [activeConversationId, setActiveConversationId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   
-  // UI States
+  
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -132,7 +132,7 @@ function App() {
   const [systemStatus, setSystemStatus] = useState('checking');
   const [latency, setLatency] = useState(null);
 
-  // Telemetry status monitor pinging backend server
+  
   useEffect(() => {
     const checkStatus = async () => {
       const start = Date.now();
@@ -149,7 +149,7 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-resize textarea as the user types
+  
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
@@ -157,7 +157,7 @@ function App() {
     }
   }, [inputValue]);
 
-  // Auto-scroll to bottom of messages container
+  
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -166,7 +166,7 @@ function App() {
     scrollToBottom();
   }, [messages, loading]);
 
-  // Reset page viewport scroll and fetch history on initial mount (keeps workspace on fresh welcome page)
+  
   useEffect(() => {
     window.scrollTo(0, 0);
     const initLoad = async () => {
@@ -175,7 +175,7 @@ function App() {
         try {
           const response = await axios.get(`${API_BASE}/chat/history?username=${encodeURIComponent(storedName)}`);
           setConversations(response.data);
-          // Keep active conversation as new/empty welcome state
+          
           setActiveConversationId(null);
           setMessages([]);
         } catch (err) {
@@ -186,7 +186,7 @@ function App() {
     initLoad();
   }, []);
 
-  // Fetch chat history for this user
+  
   const fetchHistory = async () => {
     if (!username) return;
     try {
@@ -197,14 +197,14 @@ function App() {
     }
   };
 
-  // Trigger history lists updates on username trigger
+  
   useEffect(() => {
     if (username) {
       fetchHistory();
     }
   }, [username]);
 
-  // Start/Select a conversation
+  
   const handleSelectConversation = async (id) => {
     setErrorMessage('');
     setActiveConversationId(id);
@@ -218,7 +218,7 @@ function App() {
     }
   };
 
-  // Setup/Reset to new chat session
+  
   const handleNewChat = () => {
     setActiveConversationId(null);
     setMessages([]);
@@ -226,7 +226,7 @@ function App() {
     setSidebarOpen(false);
   };
 
-  // Handle username submit
+  
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     if (inputName.trim()) {
@@ -234,7 +234,7 @@ function App() {
       setUsername(formattedName);
       localStorage.setItem('chat_username', formattedName);
       
-      // Load recent chats for the sidebar, but land on a fresh welcome console
+      
       try {
         const response = await axios.get(`${API_BASE}/chat/history?username=${encodeURIComponent(formattedName)}`);
         setConversations(response.data);
@@ -246,7 +246,7 @@ function App() {
     }
   };
 
-  // Logout/clear session
+  
   const handleLogout = () => {
     setUsername('');
     setInputName('');
@@ -256,13 +256,13 @@ function App() {
     localStorage.removeItem('chat_username');
   };
 
-  // Core message dispatcher helper (reusable for quick prompt cards)
+  
   const sendMessageText = async (messageText) => {
     if (!messageText.trim() || loading) return;
 
     setErrorMessage('');
 
-    // Optimistically update frontend UI messages log
+    
     const tempUserMessage = { sender: 'user', text: messageText, timestamp: new Date().toISOString() };
     setMessages((prev) => [...prev, tempUserMessage]);
     setLoading(true);
@@ -277,12 +277,12 @@ function App() {
       const response = await axios.post(`${API_BASE}/chat`, payload);
       
       if (response.data.success) {
-        // Update to exact conversation ID returned (for new chat sessions)
+        
         if (!activeConversationId) {
           setActiveConversationId(response.data.conversationId);
         }
         setMessages(response.data.messages);
-        fetchHistory(); // Refresh sidebar list with previews
+        fetchHistory(); 
       } else {
         setErrorMessage(response.data.error || 'Failed to get a response.');
       }
@@ -292,14 +292,14 @@ function App() {
         err.response?.data?.error || 
         'Unable to connect to the backend server. Make sure it is running on port 5000.'
       );
-      // Remove the optimistic message if it failed
+      
       setMessages((prev) => prev.slice(0, -1));
     } finally {
       setLoading(false);
     }
   };
 
-  // Form-submit message handler
+  
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (inputValue.trim()) {
@@ -308,9 +308,9 @@ function App() {
     }
   };
 
-  // Delete a specific conversation session
+  
   const handleDeleteConversation = async (id, e) => {
-    e.stopPropagation(); // Avoid triggering select conversation
+    e.stopPropagation(); 
     setErrorMessage('');
     try {
       await axios.delete(`${API_BASE}/chat/history/${id}`);
@@ -324,11 +324,11 @@ function App() {
     }
   };
 
-  // If user hasn't supplied their name, render landing page
+  
   if (!username) {
     return (
       <div className="landing-page">
-        {/* Landing Page Navbar */}
+        {}
         <nav className="landing-nav">
           <div className="nav-logo">
             <Sparkles size={22} className="logo-sparkle" />
@@ -340,7 +340,7 @@ function App() {
           </div>
         </nav>
 
-        {/* Landing Main Container */}
+        {}
         <div className="landing-content">
           <div className="landing-hero-section">
             <div className="hero-badge">Next-Gen Support Assistant</div>
@@ -352,7 +352,7 @@ function App() {
               Solve password locks, check return parameters, search in-transit cargo status, and receive real-time technical answers from our Gemini AI agent in seconds.
             </p>
 
-            {/* Feature lists in Hero section */}
+            {}
             <div className="landing-features">
               <div className="feature-item">
                 <div className="feature-dot"></div>
@@ -369,7 +369,7 @@ function App() {
             </div>
           </div>
 
-          {/* Login Action Card */}
+          {}
           <div className="landing-login-section">
             <div className="welcome-card landing-card">
               <div className="card-header">
@@ -399,7 +399,7 @@ function App() {
           </div>
         </div>
 
-        {/* Landing Footer */}
+        {}
         <footer className="landing-footer">
           <span>&copy; 2026 Vigilant Technologies. Built with React, Node.js, and MongoDB.</span>
         </footer>
@@ -409,7 +409,7 @@ function App() {
 
   return (
     <div className="app-container">
-      {/* Mobile Top Navigation Header */}
+      {}
       <header className="mobile-header">
         <button className="menu-toggle-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
           {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
@@ -417,12 +417,12 @@ function App() {
         <h3>Vigilant Support</h3>
       </header>
 
-      {/* Sidebar Backdrop for Mobile */}
+      {}
       {sidebarOpen && (
         <div className="sidebar-backdrop" onClick={() => setSidebarOpen(false)}></div>
       )}
 
-      {/* Conversations History Sidebar */}
+      {}
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''} ${sidebarCollapsed ? 'collapsed' : ''}`}>
         <div className="sidebar-header">
           <div className="header-actions">
@@ -498,7 +498,7 @@ function App() {
             </button>
           )}
 
-          {/* Floating Profile Card Popup on Hover */}
+          {}
           {!sidebarCollapsed && (
             <div className="profile-card-popup">
               <div className="profile-card-popup-header">
@@ -519,18 +519,18 @@ function App() {
             </div>
           )}
 
-          {/* Collapsed Sidebar quick sign out action click handler */}
+          {}
           {sidebarCollapsed && (
             <div className="profile-card-collapsed-click" onClick={handleLogout} title={`Signed in as ${username}. Click to Sign Out.`}>
-              {/* Tooltip or simple click indicator */}
+              {}
             </div>
           )}
         </div>
       </aside>
 
-      {/* Main Chat Box Area */}
+      {}
       <main className="chat-main">
-        {/* Chat window Header details */}
+        {}
         <header className="chat-header">
           <div className="chat-title-info">
             <div className={`chat-status-indicator ${systemStatus === 'connected' ? 'online' : 'offline'}`}></div>
@@ -547,7 +547,7 @@ function App() {
           </div>
         </header>
 
-        {/* Chat Log view list */}
+        {}
         <div className="messages-container">
           {errorMessage && (
             <div className="error-banner">
@@ -625,7 +625,7 @@ function App() {
             ))
           )}
 
-          {/* Typing Indicator */}
+          {}
           {loading && (
             <div className="message-row ai">
               <div className="message-bubble" style={{ padding: '8px 12px' }}>
@@ -641,7 +641,7 @@ function App() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Chat Input form box */}
+        {}
         <footer className="chat-footer">
           <form onSubmit={handleSendMessage} className="input-container">
             <textarea
