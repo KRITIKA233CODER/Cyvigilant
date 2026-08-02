@@ -126,7 +126,7 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
-  const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const textareaRef = useRef(null);
 
   const [systemStatus, setSystemStatus] = useState('checking');
@@ -159,7 +159,18 @@ function App() {
 
   
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+      // Fallback to guarantee scroll after DOM rendering layout calculations
+      setTimeout(() => {
+        if (messagesContainerRef.current) {
+          messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
+      }, 50);
+    }
   };
 
   useEffect(() => {
@@ -548,7 +559,7 @@ function App() {
         </header>
 
         {}
-        <div className="messages-container">
+        <div ref={messagesContainerRef} className="messages-container">
           {errorMessage && (
             <div className="error-banner">
               <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -637,8 +648,6 @@ function App() {
               </div>
             </div>
           )}
-          
-          <div ref={messagesEndRef} />
         </div>
 
         {}
