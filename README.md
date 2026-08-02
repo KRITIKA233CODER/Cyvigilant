@@ -1,4 +1,4 @@
-# 🤖 AI Customer Support Assistant
+# 🤖 Cyvigilant: AI-Powered Customer Support Portal
 
 <p align="center">
   <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
@@ -9,81 +9,85 @@
   <img src="https://img.shields.io/badge/Google%20Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Google Gemini" />
 </p>
 
-A premium, full-stack responsive AI Customer Support Assistant built with **React (Vite)**, **Express.js**, **MongoDB**, and **Google Gemini 3.5 Flash** models. 
+A premium, full-stack, glassmorphic AI Customer Support Assistant built with **React (Vite)**, **Express.js**, **MongoDB**, and **Google Gemini 3.5 Flash**. 
 
-This repository showcases advanced prompt design, resilient API fail-safes, real-time telemetry diagnostics, clean Mongoose database structures, and high-fidelity glassmorphic visual layouts.
+This system demonstrates production-ready features such as **telemetry latency diagnostics**, **resilient offline local failbacks**, **interactive micro-animations**, **dynamic markdown rendering**, and a clean **Mongoose architecture**.
 
 ---
 
-## 📌 Table of Contents
-*   [✨ Core Features](#-core-features)
-*   [🛡️ Validation & Resilience](#️-validation--resilience)
-*   [📁 Project Architecture](#-project-architecture)
-*   [📊 Database Design](#-database-design)
-*   [🚀 Installation & Quick Start](#-installation--quick-start)
-*   [🔗 API Documentation](#-api-documentation)
+## 📷 Visual Preview
+
+### 1. Onboarding & Access Support Console
+The landing page greets users with a sleek, premium dark-mode portal featuring frosted glass panels, active connection status monitoring, and clear features lists.
+
+![Onboarding Portal](./screenshot/landing_page.png)
+
+### 2. Collapsible Support Dashboard
+Once logged in, users gain access to a ChatGPT-style conversation dashboard. Features include dynamic sidebar navigation, conversation thread management, quick action templates, and auto-expanding input zones.
+
+![Support Console Dashboard](./screenshot/dashboard.png)
 
 ---
 
 ## ✨ Core Features
 
-### 🖥️ SaaS Landing Page Onboarding
-A fully styled home portal featuring marketing highlights, dynamic capability logs, online status indicators, and a frosted login panel to authenticate guest client sessions.
+### 🖥️ High-Fidelity Glassmorphic Onboarding
+*   **Frosted Glass Elements**: Uses premium glassmorphic styling, vibrant neon accent highlights, and smooth fade-in animations.
+*   **User Sessions**: Allows users to enter a custom client username to isolate and authenticate their own chat threads.
 
-### 🤖 ChatGPT-Style Support Dashboard
-Once connected, the workspace loads a clean dashboard presenting:
-*   **Quick suggestion cards** styled with premium icons to auto-submit common questions immediately.
-*   **A collapsible desktop sidebar** minimizing to a clean `80px` dock to maximize typing space.
-*   **User-isolated chats** showing and populating only the conversations started by the logged-in client.
+### 💬 Conversational Workspace
+*   **ChatGPT-Style Sidebar**: A fully collapsible list of user-specific chat histories. Minimizes to a clean 80px dock to maximize room for response reading.
+*   **Quick Suggestions**: Clicking suggestion chips automatically dispatches pre-crafted inquiries like *Refund & Return Policy*, *Password Recovery*, and *Order Status* for swift navigation.
+*   **Bouncing Thinking Indicator**: Provides real-time visual feedback using pulsing dots during AI generation cycles.
+*   **Accent Markdown Renderer**: Rich AI text response bubbles render clean headers, bullet lists, code blocks, and neon-blue highlighted bold strings.
+*   **Micro-Interactions**: Features a copy-to-clipboard action button with a 2-second checkmark verification transition.
 
-### 📋 Micro-Interactions & Rich Output
-*   **Copy-to-Clipboard**: Copy response buttons inside AI text bubbles showing 2-second checkmark indicators.
-*   **Bouncing Dots Loader**: Animated indicators representing the assistant's thinking state.
-*   **Auto-Resize Textarea**: Input box heights adapt on-the-fly as multi-line prompts are drafted.
-*   **Accent Markdown Bold**: Highlights bolded strings in glowing neon-blue text.
-
----
-
-## 🛡️ Validation & Resilience
-
-### 1. Payload Schema Verification
-All incoming parameters dispatched to `POST /api/chat` are verified by the backend. It sanitizes text and rejects requests with a `400 Bad Request` status if names or prompt inputs are empty.
-
-### 2. Telemetry Latency Monitors
-Pings the backend automatically in the background to measure round-trip database and API latency, rendering a live connectivity pill (`Connected • 45ms`) in the console header.
-
-### 3. Graceful AI Outage Failbacks
-If the Gemini API key runs out of quota, triggers rate limits, or is missing entirely, the Express endpoints catch the exception and fall back to:
-*   **System Notification Banners**: Appends an active fallback notification warning while keeping the thread responsive.
-*   **Local Regex Keyword Matchers**: Performs offline parsing (matching credentials, refunds, support status, reset keywords) to simulate helpful responses in offline developer mode.
+### 🛡️ Payload Schema & Telemetry
+*   **Input Validation**: Rejects malformed payload models, blank usernames, or empty prompt arguments before dispatching to LLM APIs.
+*   **Real-time Latency telemetry**: Continuously pings server backend systems in the background to calculate round-trip query time, updating a live connectivity pill (`Connected • 32ms`) in the UI console header.
 
 ---
 
-## 📁 Project Architecture
+## 🏗️ System Architecture
+
+The following flow represents the application sequence:
+
+```mermaid
+graph TD
+    Client[React Frontend / Vite] <-->|HTTP POST /api/chat| Server[Express Backend]
+    Server <-->|Mongoose Queries| DB[(MongoDB Database)]
+    Server -->|Gemini API Request| Gemini[Google Gemini 3.5 Flash]
+    Server -.->|Quota Limit / Error Fallback| Fallback[Local Regex Keyword Matcher]
+    Client -->|Telemetry Diagnostics Ping| HealthCheck[Server Health Monitor]
+```
+
+### Directory Structure
 
 ```text
 cyvigilant/
 ├── backend/
 │   ├── config/          # Database connection (db.js)
-│   ├── models/          # Mongoose collections schema (Conversation.js)
-│   ├── routes/          # Express controller endpoints (chat.js)
-│   ├── .env.example     # Backend environmental template
-│   └── server.js        # Entry server script
+│   ├── models/          # Mongoose collection models (Conversation.js)
+│   ├── routes/          # Express API controllers (chat.js)
+│   ├── .env.example     # Environment variable blueprint
+│   └── server.js        # Backend entry server script
 ├── frontend/
+│   ├── public/          # Static browser assets
 │   ├── src/
-│   │   ├── App.jsx      # Core React view controller and hooks
-│   │   ├── index.css    # High-fidelity custom CSS variables and layouts
-│   │   └── main.jsx     # App entry point mount
+│   │   ├── assets/      # Hero images and branding assets
+│   │   ├── App.jsx      # Core React view controller and state management
+│   │   ├── index.css    # High-fidelity global styling, vars & utility classes
+│   │   └── main.jsx     # Frontend DOM mount
 │   └── package.json
-├── .env.example         # Root level configuration template
-└── README.md            # Documentation
+├── screenshot/          # High-fidelity visual PNG captures
+└── README.md            # Modern Documentation Portal
 ```
 
 ---
 
 ## 📊 Database Design
 
-We use MongoDB modeled with Mongoose schemas. Conversations are structured using single collection documents to optimize performance:
+We store conversations in a single collection document in **MongoDB**, modeled using **Mongoose** to maximize querying speed and avoid expensive joins:
 
 ```javascript
 const ConversationSchema = new mongoose.Schema({
@@ -99,101 +103,119 @@ const ConversationSchema = new mongoose.Schema({
 });
 ```
 
-### Why this design?
-*   **Atomic Querying**: Nesting the `messages` log directly inside the `Conversation` document allows us to load entire conversation trees in a single database query.
-*   **Performance**: Avoids join queries or relational tables, ensuring high-speed delivery.
+| Field Name | Type | Description | Required |
+| :--- | :--- | :--- | :---: |
+| `username` | `String` | Unique client username session filter | Yes |
+| `messages` | `Array` | Nested messages array for single-query loads | Yes |
+| `messages.sender` | `String` | Entity category (`user` or `ai`) | Yes |
+| `messages.text` | `String` | Core message content | Yes |
+| `createdAt` | `Date` | Timestamp representing initialization date | Yes |
 
 ---
 
 ## 🚀 Installation & Quick Start
 
 ### 1. Prerequisites
-Ensure you have **Node.js** and **MongoDB** installed and running on your local machine.
+Ensure you have the following installed on your machine:
+*   [Node.js](https://nodejs.org/) (v18.0.0 or higher)
+*   [MongoDB Community Server](https://www.mongodb.com/try/download/community) (Running locally on default port `27017`)
 
-### 2. Configure Environment variables
-Copy the `.env.example` file to `.env` in the `backend` folder:
-```bash
-cp backend/.env.example backend/.env
-```
-Open `backend/.env` and paste your Google Gemini API Key:
-```text
-PORT=5000
-MONGODB_URI=mongodb://127.0.0.1:27017/ai_support_assistant
-GEMINI_API_KEY=your_gemini_api_key_here
-```
+### 2. Configure Environment Settings
+1. Make a copy of the backend environment template:
+   ```bash
+   cp backend/.env.example backend/.env
+   ```
+2. Open `backend/.env` and update the database connection URI or input your Gemini API credentials:
+   ```env
+   PORT=5000
+   MONGODB_URI=mongodb://127.0.0.1:27017/ai_support_assistant
+   GEMINI_API_KEY=your_gemini_api_key_here
+   ```
 
-### 3. Launch Backend Server
-Navigate to the `backend` directory, install packages, and boot the Express service:
+### 3. Start Backend Services
+Navigate to the server directory, install packages, and boot the server in dev mode:
 ```bash
 cd backend
 npm install
 npm run dev
 ```
-The server will start on port `5000` connected to MongoDB.
+The server will bind to port `5000` and connect to the local MongoDB daemon.
 
-### 4. Launch React Client
-Open a new terminal window, navigate to the `frontend` directory, install packages, and boot the client:
+### 4. Start React Frontend Client
+Open a second terminal window, navigate to the frontend directory, install packages, and launch the Vite dev server:
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Open **`http://localhost:5173/`** in your browser to access the console!
+Open **`http://localhost:5173/`** to access the Cyvigilant Console!
 
 ---
 
-## 🔗 API Documentation
+## 🛡️ Resilient Fail-Safe Modes
 
-### 1. Send / Continue Chat
-*   **Endpoint**: `POST /api/chat`
-*   **Payload**:
+### Offline Regex Keyword Matcher
+If the Gemini API key runs out of quota, is invalid, or has no internet connection, Cyvigilant falls back to a locally operated keyword classification framework automatically:
+*   **Seamless Transition**: Employs backend exception catching to prevent route failure.
+*   **Regex Engine**: Matches keywords (e.g., `refund`, `password`, `shipment`, `status`) to return rich, structured fallback response models with instructions, status diagnostics, and warnings.
+*   **Safety Warning Banner**: Displays an informative notice to indicate fallback mode is active while keeping the portal fully responsive.
+
+---
+
+## 🔗 API Route Reference
+
+### 1. Send/Continue Conversation Thread
+*   **Route**: `POST /api/chat`
+*   **Payload Schema**:
     ```json
     {
       "username": "Kritika",
-      "message": "I need help with password recovery",
-      "conversationId": "6a6e0fb7..." // Optional. Omit to start a new chat thread.
+      "message": "I want to request a refund",
+      "conversationId": "66ac39527..." // Optional. Leave blank to start a new chat session.
     }
     ```
-*   **Response (200 OK)**:
+*   **Success Response (200 OK)**:
     ```json
     {
       "success": true,
-      "conversationId": "6a6e0fb7...",
-      "reply": "I can help you recover your password...",
-      "messages": [ ... ]
+      "conversationId": "66ac39527...",
+      "reply": "Our refund policy allows requests within 30 days...",
+      "messages": [
+        { "sender": "user", "text": "I want to request a refund", "timestamp": "..." },
+        { "sender": "ai", "text": "Our refund policy allows...", "timestamp": "..." }
+      ]
     }
     ```
 
-### 2. Get Thread History List
-*   **Endpoint**: `GET /api/chat/history?username=Kritika`
-*   **Description**: Retrieves conversation summary previews filtered by username.
-*   **Response (200 OK)**:
+### 2. Retrieve All Conversation Summaries
+*   **Route**: `GET /api/chat/history?username=Kritika`
+*   **Success Response (200 OK)**:
     ```json
     [
       {
-        "_id": "6a6e0fb7...",
+        "_id": "66ac39527...",
         "username": "Kritika",
-        "lastMessage": "I need help with password recovery",
-        "createdAt": "2026-08-01T17:00:00.000Z"
+        "lastMessage": "I want to request a refund",
+        "createdAt": "2026-08-02T20:00:00.000Z"
       }
     ]
     ```
 
-### 3. Retrieve Thread Details
-*   **Endpoint**: `GET /api/chat/history/:id`
-*   **Response (200 OK)**:
+### 3. Fetch Full Chat History Details
+*   **Route**: `GET /api/chat/history/:id`
+*   **Success Response (200 OK)**:
     ```json
     {
-      "_id": "6a6e0fb7...",
+      "_id": "66ac39527...",
       "username": "Kritika",
       "messages": [ ... ],
-      "createdAt": "2026-08-01T17:00:00.000Z"
+      "createdAt": "2026-08-02T20:00:00.000Z"
     }
     ```
 
-### 4. Delete Thread
-*   **Endpoint**: `DELETE /api/chat/history/:id`
-*   **Response (200 OK)**:
+### 4. Delete Chat Thread
+*   **Route**: `DELETE /api/chat/history/:id`
+*   **Success Response (200 OK)**:
     ```json
     {
       "success": true,
@@ -203,5 +225,7 @@ Open **`http://localhost:5173/`** in your browser to access the console!
 
 ---
 
-## 📄 License
-Released under the MIT License. Built with ❤️ by Vigilant Technologies.
+## 🩺 System Diagnostics & Troubleshooting
+
+*   **Database connection failures**: Ensure the MongoDB service is active. Run `mongod` or check `services.msc` on Windows to make sure MongoDB is running.
+*   **Gemini API issues**: If you encounter timeouts or quota errors, verify that `GEMINI_API_KEY` in `backend/.env` is correct. The app will automatically default to fallback offline regex mode if the API fails.
